@@ -273,21 +273,25 @@ textarea {
 }
 .pagination > li {
     display:inline-block;
-    padding:0.5rem;
-    min-width:2.5rem;
+    padding: 0;
+    min-width:1rem;
     text-align: center;
+    font-size: 0.8rem;
     /*border:1px solid transparent;*/
 }
 .pagination > li.active,
+.pagination > li.active > a,
 .pagination > li:hover {
     /*border:1px solid gray;*/
     cursor: pointer;
-    box-shadow: 0px 0px 2px 2px gray;
+    box-shadow: none;
+    color:rgb(150, 150, 150);
 }
 .pagination > li > a {
     text-decoration: none;
-    color:black;
+    color: rgb(100, 100, 100);
 }
 .pagination > li:hover > a {
-    color:orangered;
+    color:rgb(150, 150, 150);
+    text-decoration: underline;	
 }
