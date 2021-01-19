@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <jsp:include page="/template/header.jsp"></jsp:include>
 
-<form action="admin_login.do" method="post">
+<form action="adminLogin.do" method="post">
 <div class="outbox" style="width:400px">
 	<div class="row center">
 		<h2>로그인</h2>

@@ -13,7 +13,7 @@ import travel.beans.AdminDto;
 
 
 
-@WebServlet(urlPatterns ="/adminLog/admin_login.do")
+@WebServlet(urlPatterns ="/admin/adminLogin.do")
 public class AdminLoginServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
