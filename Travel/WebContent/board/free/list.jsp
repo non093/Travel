@@ -16,7 +16,13 @@
   
 <% 
 	//페이지분할, 마지막 페이지
-	int boardSize = 15;
+	int boardSize;
+	try{
+		boardSize = Integer.parseInt(request.getParameter("size"));
+	}
+	catch(Exception e){
+		boardSize = 15;
+	}
 	
 	//목록개수
 	int row;
@@ -53,8 +59,6 @@
 	if(endBlock>lastPage){
 		endBlock=lastPage;
 	}
-	
-	
 %>
 
 <%
@@ -81,7 +85,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/common.css">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/freeboard.css">
 <style>
 	.table{
 		color: rgb(100, 100, 100);
@@ -112,32 +116,41 @@
 	}
 	.input.input-select{
 		border-radius: 5px;
+		border-color: rgb(229, 229, 229);
 		padding: 0.2rem;
 		color: rgb(100, 100, 100);
 		cursor: pointer;
 	}
 	.input.input-text{
 		border-style: none none solid;
+		border-color: rgb(150, 150, 150);
 		padding: 0.2rem;
 		color: rgb(100, 100, 100);
+		width: 30%;
 	}
 	.input.input-sbtn{
 		padding: 0.2rem 0.7rem;
-		border:1px solid gray;
+		border:1px solid rgb(229, 229, 229);
 		color: rgb(100, 100, 100);
 		cursor: pointer;
 		background-color:white;
 		border-radius: 5px;
 	}
-	
 	.input.write-btn{
 		padding: 0.2rem 1rem;
-		border:1px solid gray;
+		border:1px solid rgb(229, 229, 229);
 		color: rgb(100, 100, 100);
 		cursor: pointer;
 		background-color:white;
 		border-radius: 5px;
 	}
+	.input.input-sbtn:hover{
+		background-color: #f5f5f5;
+	}
+	.input.write-btn:hover{
+		background-color: #f5f5f5;
+	}
+	
 	/*float*/
 	.float-box::after{
 		content: "";
@@ -164,7 +177,39 @@
 		font-size: 1.3rem;
 		color: rgb(90, 90, 90);
 	}
-
+	
+	/*드롭다운*/
+	.dropdown {
+	  display: inline-block;
+	  color: rgb(100, 100, 100);
+	  font-size: 0.8rem;
+	  cursor:pointer;
+	}
+	
+	.dropdown-content {
+	  display: none;
+	  position: absolute;
+	  background-color: #f9f9f9;
+	  max-width: auto;
+	  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+	  padding: 10px 12px;
+	  z-index: 1;
+	  font-size: 0.9rem;
+	  cursor:pointer;
+	}
+	.dropdown-content a{
+		color: rgb(100, 100, 100);
+		text-decoration: none;
+	}
+	.dropdown:hover{
+		text-decoration: underline;
+	}
+	.dropdown:hover .dropdown-content {
+	  display: block;
+	}
+	.dropdown-content div:hover a {
+	  text-decoration: underline;
+	}
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script>
@@ -174,20 +219,38 @@
 			location.href="<%=request.getContextPath()%>/board/free/write.jsp";
 		});
 		
-		/*네비게이터 클릭이벤트*/
-		$(".previous").click(function(e) {
-			if(<%=p%>==1){
-				e.preventDefault();
-				$(this.parent()).off("hover");
-			}
-		});
-		$(".next").click(function(e){
-			if(<%=p%>==<%=lastPage%>){
-				e.preventDefault();
-			}
-		});
+		/*네비게이터(이전, 다음) 클릭이벤트*/
+		var p = <%=p%>;
+		var block = <%=block%>;
+		var lastPage = <%=lastPage%>;
+		/*몫과 나머지 구하기(다음 클릭 제어 위해서)*/
+		var share = parseInt(lastPage/block);
+		var remain = lastPage%block;
+		var startP;
+		if(remain==0){
+			startP = (share-1)*block+1;
+		}
+		else{
+			startP = share*block+1;
+		}
 		
-		/*말머리 필터*/
+		if(p>=1&&p<=block){
+			$(".previous").click(function(e) {e.preventDefault(); });
+			$(".previous").css("text-decoration", "none").css("color", "rgb(229, 229, 229)").css("cursor", "default");
+		}
+		
+		if(p>=startP && p<=lastPage){
+			$(".next").click(function(e){e.preventDefault(); });
+			$(".next").css("text-decoration", "none").css("color", "rgb(229, 229, 229)").css("cursor", "default");
+		}
+		
+		/*검색버튼 이벤트*/
+		$(".input-sbtn").click(function(e){
+			if($(".input-text").val().trim()==""){
+				alert("검색어를 입력해주세요.");
+				return false;
+			}
+		});
 		
 	});
 </script>
@@ -200,19 +263,44 @@
 		<div class="overflow">
 			<!-- 게시글 필터 -->
 			<div class="float-right">
-				<input type="checkbox" id="notice">
-				<label for="notice">공지숨기기</label>
+				<label>
+				<input type="checkbox">
+				공지숨기기
+				</label>
 				
-				<a href="list.jsp?head=전체">전체</a>
-				<a href="list.jsp?head=사담">사담</a>
-				<a href="list.jsp?head=질문">질문</a>
+				<div class="dropdown">
+					<span>말머리&darr;</span>
+					<div class="dropdown-content">
+						<div>
+							<a href="list.jsp?head=전체">전체</a>
+						</div>
+						<div>
+							<a href="list.jsp?head=사담">사담</a>
+						</div>
+						<div>
+							<a href="list.jsp?head=질문">질문</a>
+						</div>
+					</div>
+				</div>
 				
-				<select class="input input-inline input-select" name="page_num">
-					<option>목록개수</option>
-					<option>10개</option>
-					<option>20개</option>
-					<option>30개</option>
-				</select>
+				<div class="dropdown">
+					<span>목록개수&darr;</span>
+					<div class="dropdown-content">
+						<div>
+							<a href="list.jsp?size=10">10개</a>
+						</div>
+						<div>
+							<a href="list.jsp?size=15">15개</a>
+						</div>
+						<div>
+							<a href="list.jsp?size=30">20개</a>
+						</div>
+						<div>
+							<a href="list.jsp?size=30">30개</a>
+						</div>
+					</div>
+				</div>
+				
 			</div>
 			
 			<span class="title">자유게시판</span>
@@ -235,17 +323,21 @@
 		<tbody>
 		
 			<!-- 게시글 목록 출력 -->
-			<%for(FreeBoardDto freeDto : freeList){ %>
-			<tr>
-				<td class="head-color"><%=freeDto.getBoard_head() %></td>
-				<td width="50%" class="left">
-					<a href="detail.jsp?board_no=<%=freeDto.getBoard_no() %>"><%=freeDto.getBoard_title() %></a>
-				</td>
-				<td><%=freeDto.getBoard_nick() %></td>
-				<td><%=freeDto.getBoard_date() %></td>
-				<td><%=freeDto.getBoard_view() %></td>
-				<td><%=freeDto.getBoard_like() %></td>
-			</tr>
+			<%if(freeList.isEmpty()){ %>
+				<tr><td colspan="6">검색결과가 존재하지 않습니다.</td></tr>
+			<%}else{ %>
+				<%for(FreeBoardDto freeDto : freeList){ %>
+				<tr>
+					<td class="head-color"><%=freeDto.getBoard_head() %></td>
+					<td width="50%" class="left">
+						<a href="detail.jsp?board_no=<%=freeDto.getBoard_no() %>"><%=freeDto.getBoard_title() %></a>
+					</td>
+					<td><%=freeDto.getBoard_nick() %></td>
+					<td><%=freeDto.getBoard_date() %></td>
+					<td><%=freeDto.getBoard_view() %></td>
+					<td><%=freeDto.getBoard_like() %></td>
+				</tr>
+				<%} %>
 			<%} %>
 			
 		</tbody>
@@ -288,7 +380,7 @@
 	
 	<!-- 검색창 -->
 	<div class="row center div-search">
-	<form action="list.jsp" method="get">
+	<form action="list.jsp" method="post">
 		
 		<select class="input input-inline input-select" name="head">
 		<option <%if(isFilter && board_head.equals("전체")){ %>selected<%} %>>전체</option>
@@ -302,9 +394,9 @@
 		</select>
 		
 		<%if(isSearch) {%>
-		<input type="text" class="input input-inline input-text" name="key" value="<%=key%>" required>
+		<input type="text" class="input input-inline input-text" name="key" value="<%=key%>" placeholder="검색어를 입력해주세요.">
 		<%}else{%>
-		<input type="text" class="input input-inline input-text" name="key" required>
+		<input type="text" class="input input-inline input-text" name="key" placeholder="검색어를 입력해주세요.">
 		<%} %>
 		
 		<input type="submit" class="input input-inline input-sbtn" value="검색">
