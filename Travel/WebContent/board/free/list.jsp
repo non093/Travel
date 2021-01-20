@@ -15,7 +15,7 @@
 %> 
   
 <% 
-	//페이지분할, 마지막 페이지
+	//페이지분할,마지막 페이지
 	int boardSize;
 	try{
 		boardSize = Integer.parseInt(request.getParameter("size"));
