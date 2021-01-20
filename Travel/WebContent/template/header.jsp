@@ -10,7 +10,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-    <title>Document</title>
+    <title>오늘의 길</title>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/common.css">
 <style>
 	article::after {
@@ -64,7 +64,9 @@
 <body>
 	<article>
 		<aside>
-			<img alt="로고 이미지" src="image/logo.png" style="width:250px; height:250px;" align="left">
+			<a href="<%=request.getContextPath()%>/index.jsp">
+				<img alt="로고 이미지" src="image/logo.png" style="width:250px; height:250px;" align="left">
+			</a>
 			<div class="menuBtn">
         		<p>&equiv;닫힘</p>
         		<p style="display:none;">&equiv;열림</p>
