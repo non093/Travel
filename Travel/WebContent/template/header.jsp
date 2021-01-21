@@ -1,10 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ page import="beans.*" %>
+    <%@ page import="util.*" %>
     <%
 	boolean isLogin = session.getAttribute("check") != null;
 	
 	String auth = (String)session.getAttribute("auth");
 	boolean isAdmin = isLogin && auth.equals("관리자");
+	
+	VisitCountDAO visitCountDAO = new VisitCountDAO();
+	
+	int todayCount = 0;
+    int totalCount = 0;
+	
+	visitCountDAO.setVisitTotalCount();
 %>
 <!DOCTYPE html>
 <html>
@@ -78,8 +87,8 @@
 					<li><a href="<%=request.getContextPath()%>/member/Board_alert.do">공지 게시판</a></li>
 					<li><a href="<%=request.getContextPath()%>/member/Board_free.do">자유 게시판</a></li>
 					<li><a href="<%=request.getContextPath()%>/member/Board_travel.do">여행 게시판</a></li>
-					<li>전체 : <%=session.getAttribute("totalCount") %></li>
-					<li>오늘 : <%=session.getAttribute("todayCount") %></li>
+					<li>전체 : <%=visitCountDAO.getVisitTotalCount()%></li>
+					<li>오늘 : <%=visitCountDAO.getVisitTodayCount()%></li>
 				</ul>
     		</div>
     	</aside>
