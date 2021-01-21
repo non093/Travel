@@ -1,0 +1,279 @@
+/*
+    자주 사용하는 디자인 코드들을 보관한 뒤 불러온다
+*/
+
+/* 초기화 디자인(reset style) */
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/*
+    이미지 디자인
+
+    종류
+    - 화면에 가득차는 이미지(폭 100%)
+    - 둥근 이미지(원형, 둥그스름)
+    - 마우스에 반응하는 이미지(테두리, 그림자, 투명도) - 조건부 스타일
+
+    공통 스타일 : .img
+    개별 스타일 : 
+    - 가득차는 이미지 : .img-full
+    - 원형 이미지 : .img-circle
+    - 둥근 이미지 : .img-round
+    - 나뭇잎모양 이미지 : .img-leaf
+    - 테두리가 생기는 이미지 : .img-border
+    - 선명해지는 이미지 : .img-clear
+    - 그림자가 생기는 이미지 : .img-shadow
+*/
+.img {
+
+}
+/* class="img img-full"일 때만 적용되는 스타일*/
+.img.img-full{
+    width:100%;
+}
+.img.img-circle {
+    border-radius: 50%;/*모서리 50% 돌려깎기*/
+}
+.img.img-round {
+    border-radius: 50px;
+}
+.img.img-leaf {
+    border-top-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+}
+
+/* 조건부 스타일은 콜론(:)을 사용한다 */
+
+/* 다음 스타일은 마우스가 올라간 경우(hover)만 적용*/
+.img.img-border{
+    border:2px solid transparent;
+}
+.img.img-border:hover {
+    border:2px solid gray;
+}
+
+/* opacity는 0부터 1 사이의 값을 가진다 */
+.img.img-clear {
+    opacity: 0.5;
+}
+.img.img-clear:hover {
+    opacity: 1;
+}
+
+/* 
+    box-shadow속성은 그림자 설정이 가능하다
+    1. x좌표 이동값
+    2. y좌표 이동값
+    3. 뭉개지는 정도
+    4. 넓이
+    5. 색상
+*/
+.img.img-shadow:hover{
+    box-shadow: 0px 0px 3px 3px #333;
+}
+
+/*
+    1 rem : 글자 1개의 세로 크기와 동일
+*/
+
+/*
+    테이블 스타일링
+
+    공통 스타일 : .table
+    확장 스타일 : 
+    - 테두리 부여 : .table-border
+    - 줄무늬 부여 : .table-pattern
+    - 커서 강조 효과 부여 : .table-highlight
+    - 가로줄 테두리 부여 : .table-horizontal
+*/
+.table {
+    width:100%;
+    border-spacing: 0;
+}
+
+/*
+    그냥 th, td라고 표기하면 태그 자체를 수정하게 된다
+    .table 안에 있는 th와 td에만 효과를 부여하고 싶다면
+
+    연계 선택자 : 특정 태그를 기준으로 연관된 태그를 선택하는 것
+
+    .table > thead > tr > th : 
+        class=table 바로 밑 thead 바로 밑 tr 바로 밑 th 선택(직계 자식 탐색)
+    .table th : 
+        class=table 안에 있는 모든 th(후손 탐색)
+*/
+.table > thead > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > th,
+.table > tbody > tr > td,
+.table > tfoot > tr > th,
+.table > tfoot > tr > td
+{
+    padding: 0.5rem;
+    text-align: center;
+}
+
+/* 테두리 부여 확장 스타일 */
+.table.table-border {
+    border:1px solid gray;
+    /* 테두리를 합쳐주는 속성 */
+    border-collapse: collapse;
+}
+
+.table.table-border > thead > tr > th,
+.table.table-border > thead > tr > td,
+.table.table-border > tbody > tr > th,
+.table.table-border > tbody > tr > td,
+.table.table-border > tfoot > tr > th,
+.table.table-border > tfoot > tr > td
+{
+    border:1px solid gray;
+}
+
+/* 
+    줄무늬 확장 스타일 
+    :nth-child()에는 패턴 지정이 가능
+*/
+.table.table-pattern > thead > tr {
+    background-color: #dddddd;
+    color:black;
+}
+.table.table-pattern > tbody > tr:nth-child(2n) {
+    background-color: #dddddd;
+}
+
+/* 마우스가 올라간 줄에 강조효과 주는 스타일 */
+.table.table-highlight > tbody > tr:hover {
+    background-color: #bbbbbb;
+}
+
+/* 
+    가로줄 테두리 스타일 
+    :not() 으로 원치 않는 상황을 뺄 수 있다
+    :first-child, :last-child로 첫번째와 마지막을 선택할 수 있다.
+*/
+.table.table-horizontal > tbody > tr > th,
+.table.table-horizontal > tbody > tr > td{
+    border-bottom:1px solid black;
+}
+.table.table-horizontal > tbody > tr:last-child > th,
+.table.table-horizontal > tbody > tr:last-child > td{
+    border-bottom: none;
+}
+.table.table-horizontal{/*테이블 상하 테두리*/
+    border-top: 5px double black;
+    border-bottom: 5px double black;
+}
+.table.table-horizontal > tfoot > tr:first-child > th,
+.table.table-horizontal > tfoot > tr:first-child > td{
+    border-top: 5px double black;/*하단 첫줄 테두리*/
+}
+.table.table-horizontal > thead > tr:last-child > th,
+.table.table-horizontal > thead > tr:last-child > td{
+    border-bottom: 5px double black;/*상단 마지막줄 테두리*/
+}
+
+/*
+    내부 정렬 스타일
+
+    !important를 붙이면 우선순위가 올라감
+    (어떠한 방법으로도 바꿀 수 없을때만 사용)
+*/
+.left {
+    text-align: left !important;
+}
+.center{
+    text-align: center !important;
+}
+.right {
+    text-align: right !important;
+}
+
+/*
+    입력창 스타일(input, select, textarea)
+
+    공용 스타일 : .input
+    확장 스타일 : 
+    - 밑줄만 쳐지는 입력창 : .input-underline
+    - 100%가 아닌 입력창 : .input-inline
+    - 하이라이트 입력창 : .input-highlight
+    - 좌측에 그림이 들어가는 입력창 : .input-hint
+*/
+
+.input {
+    width:100%;
+    padding:0.5rem;
+    outline:none;
+    border:0.5px solid grey;
+}
+
+.input.input-underline {
+    border:none;
+    border-bottom: 0.5px solid grey;
+}
+
+.input.input-inline {
+    width:auto;
+}
+/* :focus는 선택한 경우에 대한 스타일 적용 가능 */
+.input.input-highlight:focus {
+    border-color:red;
+}
+
+.input.input-hint {
+    padding-left: 2.5rem;
+}
+
+/* 모든 textarea의 크기변경을 수직으로만 변경 설정 */
+textarea {
+    resize: vertical;
+}
+
+/*
+    레이아웃 작성 규칙!
+    1. 바깥쪽에 class="outbox"를 배치한다
+    2. 안쪽에 필요한 줄 수를 세어 class="row"를 배치한다
+    3. 만들어야 할 컴포넌트를 배치한 후 스타일링한다
+    4. class="outbox"의 폭을 설정한다
+*/
+.outbox {
+    margin:0 auto;
+}
+.outbox > .row {
+    margin:0.5rem 0;
+}
+
+/*
+    페이지 네비게이션 스타일
+*/
+.pagination {
+    margin:0;
+    padding:0;
+    list-style: none;
+}
+.pagination > li {
+    display:inline-block;
+    padding:0.5rem;
+    min-width:2.5rem;
+    text-align: center;
+    /*border:1px solid transparent;*/
+}
+.pagination > li.active,
+.pagination > li:hover {
+    /*border:1px solid gray;*/
+    cursor: pointer;
+    box-shadow: 0px 0px 2px 2px gray;
+}
+.pagination > li > a {
+    text-decoration: none;
+    color:black;
+}
+.pagination > li:hover > a {
+    color:orangered;
+}
