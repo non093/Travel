@@ -1,6 +1,6 @@
 # Travel
 
--.classpath 삭제 pull 할 때 경로로 인한 오류 발생 -
+1. classpath 삭제 pull 할 때 경로로 인한 오류 발생 -
 
 - 네이버 에디터 스마트 적용 방법 (github에 push 하면 파일 손실 발생)
 - 지도 추가 후 공유
