@@ -12,8 +12,14 @@
 	
 	int todayCount = 0;
     int totalCount = 0;
-	
-	visitCountDAO.setVisitTotalCount();
+    
+	    String visit = session.getId();
+		
+	    boolean isOverlap = visitCountDAO.visitCheck(visit);
+	    
+	    if(isOverlap){
+			visitCountDAO.setVisitTotalCount(visit);
+	    }
 %>
 <!DOCTYPE html>
 <html>
@@ -21,43 +27,8 @@
 <meta charset="UTF-8">
     <title>오늘의 길</title>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/common.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
 <style>
-	article::after {
-            content:"";
-            display: block;
-            clear:both;
-    }
-	aside {
-            float:left;
-            width:20%;
-            min-height:500px;
-    }
-    section {
-            float:left;
-            width:80%;
-            min-height:500px;
-    }
-	div {
-		min-height: 250px;
-	} 
-	header, footer, section {
-		padding:1.5rem;
-	}
-    #menuArea {
-  		height: 500px;
-  		width: 250px;
- 		background-color: grey;
-	}
-   	.menuBtn p {
-   		position: absolute;
-   		top: 245px;
-   		left: 200px;
-   		z-index: 1;
-   		display: block;
-   		font-size:1em;
-   		color: #444;
-   		cursor: pointer;
-	}
 </style>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script>
@@ -71,16 +42,19 @@
 </script>
 </head>
 <body>
+<main>
 	<article>
 		<aside>
 			<a href="<%=request.getContextPath()%>/index.jsp">
-				<img alt="로고 이미지" src="image/logo.png" style="width:250px; height:250px;" align="left">
+				<img alt="로고 이미지" src="image/logo.png" style="width:250px; height:200px;" align="left">
 			</a>
 			<div class="menuBtn">
         		<p>&equiv;닫힘</p>
         		<p style="display:none;">&equiv;열림</p>
     		</div>
     		<div id="menuArea">
+    			<br>
+    			<br>
     			<br>
     			<ul>
 					<li><a href="<%=request.getContextPath()%>/member/Board.do">전체 게시판</a></li>
@@ -98,11 +72,15 @@
 				<input type="text" class="input input-inline" name="key" required placeholder="검색하세요">
 				<input type="submit" class="input input-inline" value="검색">
 				<%if(!isLogin){ %>
-					<a href="<%=request.getContextPath()%>/member/join.jsp">회원가입</a>
 					<a href="<%=request.getContextPath()%>/member/login.jsp">로그인</a>
+					<a href="<%=request.getContextPath()%>/member/join.jsp">회원가입</a>
 				<%}else{ %>
-					<a href="<%=request.getContextPath()%>/member/logout.do">로그아웃</a>
-					<a href="<%=request.getContextPath()%>/member/my.jsp">내정보</a>
+					<div class="dropdown">
+				        <label for="ck">아이디</label>
+				        <input type="checkbox" id="ck">
+				        <a href="<%=request.getContextPath()%>/member/logout.do">로그아웃</a>
+						<a href="<%=request.getContextPath()%>/member/my.jsp">내정보</a>
+				    </div>
 				<%} %>
 				<%if(isAdmin){ %>
 					<a href="<%=request.getContextPath()%>/admin/home.jsp">관리메뉴</a>
