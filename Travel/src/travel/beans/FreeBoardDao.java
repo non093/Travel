@@ -88,7 +88,7 @@ public class FreeBoardDao {
 		
 		String sql = "select * from ("
 				+ "	select rownum rn, TMP.* from("
-				+ "	select * from board order by board_no desc"
+				+ "	select * from board where board_cate='자유' order by board_no desc"
 				+ "	)TMP"
 				+ ") where rn between ? and ?";
 		PreparedStatement ps = con.prepareStatement(sql);
@@ -121,7 +121,7 @@ public class FreeBoardDao {
 		String sql = "select * from ("
 				+ "	select rownum rn, TMP.* from("
 				+ "	select * from board "
-				+ "	where instr(#1, ?) >0"
+				+ "	where board_cate = '자유' and instr(#1, ?) >0"
 				+ "	order by board_no desc"
 				+ "	)TMP"
 				+ ") where rn between ? and ?";
@@ -299,6 +299,49 @@ public class FreeBoardDao {
 		
 		con.close();
 		return count;
+	}
+	
+	//공지사항 조회 메소드
+	public List<FreeBoardDto> selectedNotice() throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select b.* from "
+				+ "board b inner join notice n on board_no = notice_board_no "
+				+ "order by board_no desc";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		
+		List<FreeBoardDto> list = new ArrayList<>(); //조회
+		while(rs.next()) {
+			FreeBoardDto dto = new FreeBoardDto();
+			dto.setBoard_no(rs.getInt("board_no"));
+			dto.setBoard_nick(rs.getString("board_nick"));
+			dto.setBoard_head(rs.getString("board_head"));
+			dto.setBoard_title(rs.getString("board_title"));
+			dto.setBoard_date(rs.getDate("board_date"));
+			dto.setBoard_like(rs.getInt("board_like"));
+			dto.setBoard_view(rs.getInt("board_view"));
+			list.add(dto);
+		}
+		
+		con.close();
+		
+		return list;
+	}
+	
+	//공지사항 개수 구하는 메소드
+	public int selectedNoticeNum() throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select count(notice_no) from notice";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		int num = rs.getInt(1);
+		
+		con.close();
+		
+		return num;
 	}
 }
 

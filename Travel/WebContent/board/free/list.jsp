@@ -3,10 +3,16 @@
 <%@page import="travel.beans.FreeBoardDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
 <%
 	request.setCharacterEncoding("UTF-8");
-	FreeBoardDao freeBoardDao = new FreeBoardDao(); 
+%>
+<%
+	FreeBoardDao freeBoardDao = new FreeBoardDao();
+	
+	//공지사항 목록 구하기, 공지사항 개수 확인
+	List<FreeBoardDto> noticeList = freeBoardDao.selectedNotice();
+	int noticeNum = freeBoardDao.selectedNoticeNum();
+	
 	String type = request.getParameter("type"); 
 	String key = request.getParameter("key");
 	String board_head = request.getParameter("head");
@@ -17,11 +23,16 @@
 <% 
 	//페이지분할,마지막 페이지
 	int boardSize;
+	if(session.getAttribute("size") == null){ //초기 기본페이지 개수 설정하기
+		boardSize=15;
+		session.setAttribute("size", boardSize);
+	} 
 	try{
 		boardSize = Integer.parseInt(request.getParameter("size"));
+		session.setAttribute("size", boardSize);
 	}
 	catch(Exception e){
-		boardSize = 15;
+		boardSize = (int)session.getAttribute("size");
 	}
 	
 	//목록개수
@@ -80,6 +91,10 @@
 	
 %>
 
+<%
+	//공지숨기기 상태 저장
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -104,15 +119,24 @@
 	.table>tbody>tr:hover{
 		background-color: #f5f5f5;
 	}
-	.table>tbody>tr>td>a{
+	.table>.listBlock>tr>td>a{ /*목록부분*/
 		color: rgb(100, 100, 100);
 		text-decoration:none;
+	}
+	.table>.noticeBlock>tr>td>a{/*공지부분*/
+		color: rgb(100, 100, 100);
+		text-decoration:none;
+		font-weight:bold;
 	}
 	.table>tbody>tr>td>a:hover{
 		text-decoration: underline;
 	}
 	.head-color{
 		color: rgb(150, 150, 150);
+	}
+	.notice-head-color{
+		color: rgb(100, 100, 100);
+		font-weight:bold;
 	}
 	.input.input-select{
 		border-radius: 5px;
@@ -184,6 +208,7 @@
 	  color: rgb(100, 100, 100);
 	  font-size: 0.8rem;
 	  cursor:pointer;
+	  min-width: 50px;
 	}
 	
 	.dropdown-content {
@@ -205,11 +230,17 @@
 		text-decoration: underline;
 	}
 	.dropdown:hover .dropdown-content {
-	  display: block;
+		display: block;
 	}
 	.dropdown-content div:hover a {
-	  text-decoration: underline;
+		text-decoration: underline;
 	}
+	
+	.noticelbl{
+		color: rgb(100, 100, 100);
+	 	font-size: 0.8rem;
+	}
+	
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script>
@@ -223,7 +254,7 @@
 		var p = <%=p%>;
 		var block = <%=block%>;
 		var lastPage = <%=lastPage%>;
-		/*몫과 나머지 구하기(다음 클릭 제어 위해서)*/
+		/*몫과 나머지 구하기('다음' 클릭 제어 위해서)*/
 		var share = parseInt(lastPage/block);
 		var remain = lastPage%block;
 		var startP;
@@ -251,6 +282,52 @@
 				return false;
 			}
 		});
+
+		/*공지숨기기 이벤트*/
+		$(".noticeHide").change(function(e){
+			$(".noticeBlock").toggle();
+			sessionStorage.setItem("notice", $(this).prop("checked"));
+		});
+		
+		if(sessionStorage.getItem("notice") == "true"){
+			$(".noticeHide").prop("checked", true);
+			$(".noticeBlock").hide();
+		}
+		
+		
+		/*말머리 글자변경 */
+		let filter = <%=isFilter%>;
+		if(filter){
+			let head = "<%=board_head%>";
+			$(".headFilter").text(head);
+		}
+		
+		/*글개수 글자변경 */
+		let listSize = <%=boardSize%>;
+		let text = listSize + "개 보기";
+		$(".listSize").text(text);
+		
+		/*글개수 변경 클릭 이벤트*/
+		$(".listSizeHref").click(function(e){
+			let href="";
+			let target = $(this).text().substr(0,2);
+			let isSearch = <%=isSearch%>;
+			let isFilter = <%=isFilter%>;
+			if(isSearch&&isFilter){
+				href="list.jsp?type=<%=type %>&key=<%=key %>&head=<%=board_head%>&size="+target;
+			}
+			else if(!isSearch&&isFilter){
+				href="list.jsp?head=<%=board_head%>&size="+target;
+			}
+			else if(isSearch&&!isFilter){
+				href="list.jsp?type=<%=type %>&key=<%=key %>&size="+target;
+			}
+			else{
+				href="list.jsp?size="+target;
+			}
+			location.href=href;
+		});
+		
 		
 	});
 </script>
@@ -263,13 +340,13 @@
 		<div class="overflow">
 			<!-- 게시글 필터 -->
 			<div class="float-right">
-				<label>
-				<input type="checkbox">
+				<label class="noticelbl">
+				<input type="checkbox" class="noticeHide">
 				공지숨기기
 				</label>
 				
-				<div class="dropdown">
-					<span>말머리&darr;</span>
+				<div class="dropdown center">
+					<span class="headFilter">말머리&darr;</span>
 					<div class="dropdown-content">
 						<div>
 							<a href="list.jsp?head=전체">전체</a>
@@ -284,19 +361,19 @@
 				</div>
 				
 				<div class="dropdown">
-					<span>목록개수&darr;</span>
+					<span class="listSize">목록개수&darr;</span>
 					<div class="dropdown-content">
 						<div>
-							<a href="list.jsp?size=10">10개</a>
+							<a class="listSizeHref">10개</a>
 						</div>
 						<div>
-							<a href="list.jsp?size=15">15개</a>
+							<a class="listSizeHref">15개</a>
 						</div>
 						<div>
-							<a href="list.jsp?size=30">20개</a>
+							<a class="listSizeHref">20개</a>
 						</div>
 						<div>
-							<a href="list.jsp?size=30">30개</a>
+							<a class="listSizeHref">30개</a>
 						</div>
 					</div>
 				</div>
@@ -320,9 +397,27 @@
 			<th>추천</th>
 			</tr>
 		</thead>
-		<tbody>
 		
-			<!-- 게시글 목록 출력 -->
+		<!-- 공지 출력 -->
+		<tbody class="noticeBlock">
+			<%if(noticeNum != 0) {%>
+				<%for(FreeBoardDto notice : noticeList){ %>
+					<tr>
+						<td class="notice-head-color">공지</td>
+						<td width="50%" class="left notice-color">
+							<a href="detail.jsp?board_no=<%=notice.getBoard_no() %>"><%=notice.getBoard_title() %></a>
+						</td>
+						<td><%=notice.getBoard_nick() %></td>
+						<td><%=notice.getBoard_date() %></td>
+						<td><%=notice.getBoard_view() %></td>
+						<td><%=notice.getBoard_like() %></td>
+					</tr>
+				<%} %>
+			<%} %>
+		</tbody>
+			
+		<!-- 게시글 목록 출력 -->
+		<tbody class="listBlock">
 			<%if(freeList.isEmpty()){ %>
 				<tr><td colspan="6">검색결과가 존재하지 않습니다.</td></tr>
 			<%}else{ %>
@@ -339,8 +434,8 @@
 				</tr>
 				<%} %>
 			<%} %>
-			
 		</tbody>
+		
 		</table>
 	</div>
 	
@@ -352,7 +447,7 @@
 		<!-- 페이지 네비게이터 -->
 		<div class="center">
 			<ul class="pagination">
-					<li><a href="list.jsp?p=<%=startBlock-1%>" class="previous">&lt;이전</a></li>
+					<li><a href="list.jsp?p=<%=startBlock-1%>&size=<%=boardSize %>" class="previous">&lt;이전</a></li>
 				  	
 				  	<%for(int i=startBlock; i<=endBlock; i++) {%>
 				  		<%if(i==p){ %>
