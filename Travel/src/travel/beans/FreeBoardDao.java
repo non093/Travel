@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import travel.util.JdbcUtil;
 
@@ -26,6 +27,8 @@ public class FreeBoardDao {
 			
 			con.close();
 		}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 	//게시글 목록 조회
 	public List<FreeBoardDto> select() throws Exception{
@@ -152,7 +155,7 @@ public class FreeBoardDao {
 	
 	//말머리 + 검색 목록 조회
 	public List<FreeBoardDto> selectByPage(int startRow, int endRow, String type, String key, String board_head) throws Exception{
-		if(board_head.equals("전체")) {
+		if(Objects.isNull(board_head) || (!board_head.equals("사담") && !board_head.equals("질문"))) {
 			return selectByPage(startRow, endRow, type, key);
 		}
 		
@@ -191,7 +194,7 @@ public class FreeBoardDao {
 	}
 	//only 말머리 목록 조회
 	public List<FreeBoardDto> selectByPage(int startRow, int endRow, String board_head) throws Exception{
-		if(board_head.equals("전체")) {
+		if(Objects.isNull(board_head) || (!board_head.equals("사담") && !board_head.equals("질문"))) {
 			return selectByPage(startRow, endRow);
 		}
 		
@@ -228,6 +231,8 @@ public class FreeBoardDao {
 		return list;
 	}
 	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	//게시글 목록 개수
 	public int selectCount() throws Exception{
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
@@ -261,7 +266,7 @@ public class FreeBoardDao {
 	
 	//말머리 + 검색 게시글 수
 	public int selectCount(String type, String key, String board_head) throws Exception{
-		if(board_head.equals("전체")) {
+		if(Objects.isNull(board_head) || (!board_head.equals("사담") && !board_head.equals("질문"))) {
 			return selectCount(type, key);
 		}
 		
@@ -283,7 +288,7 @@ public class FreeBoardDao {
 	
 	//말머리 검색 게시글 수
 	public int selectCount(String board_head) throws Exception{
-		if(board_head.equals("전체")) {
+		if(Objects.isNull(board_head) || (!board_head.equals("사담") && !board_head.equals("질문"))) {
 			return selectCount();
 		}
 		
@@ -300,6 +305,8 @@ public class FreeBoardDao {
 		con.close();
 		return count;
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////
 	
 	//공지사항 조회 메소드
 	public List<FreeBoardDto> selectedNotice() throws Exception{

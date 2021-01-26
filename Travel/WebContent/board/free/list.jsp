@@ -18,6 +18,11 @@
 	String board_head = request.getParameter("head");
 	boolean isSearch = type != null && key != null;
 	boolean isFilter = board_head != null;
+	//url로 이상한 값 들어온 경우 처리
+	if(isFilter && !board_head.equals("사담") && !board_head.equals("질문")){
+		board_head = "전체";
+	}
+
 %> 
   
 <% 
@@ -37,17 +42,11 @@
 	
 	//목록개수
 	int row;
-	if(isSearch && isFilter){
+	if(isSearch){
 		row = freeBoardDao.selectCount(type, key, board_head);
 	}
-	else if(isSearch && !isFilter){
-		row = freeBoardDao.selectCount(type, key);
-	}
-	else if(!isSearch && isFilter){
-		row = freeBoardDao.selectCount(board_head); 
-	}
 	else{
-		row = freeBoardDao.selectCount();
+		row = freeBoardDao.selectCount(board_head); 
 	}
 	int lastPage = (row + boardSize - 1)/boardSize;
 	
@@ -76,24 +75,15 @@
 	//페이지 번호에 따른 게시글 목록 출력
 	//검색
 	List<FreeBoardDto> freeList;
-	if(isSearch && isFilter){ 
+	if(isSearch){ 
 		freeList = freeBoardDao.selectByPage(startRow, endRow, type, key, board_head); 
 	}
-	else if(isSearch && !isFilter){
-		freeList = freeBoardDao.selectByPage(startRow, endRow, type, key); 
-	}
-	else if(!isSearch && isFilter){
-		freeList = freeBoardDao.selectByPage(startRow, endRow, board_head); 
-	}
 	else{
-		freeList = freeBoardDao.selectByPage(startRow, endRow);
+		freeList = freeBoardDao.selectByPage(startRow, endRow, board_head); 
 	}
 	
 %>
 
-<%
-	//공지숨기기 상태 저장
-%>
 
 <!DOCTYPE html>
 <html>
@@ -241,6 +231,23 @@
 	 	font-size: 0.8rem;
 	}
 	
+	.reset{
+		color: rgb(100, 100, 100);
+	 	font-size: 0.8rem;
+	 	text-decoration: none;
+	}
+	
+	.reset:hover{
+		text-decoration: underline;
+	}
+	
+	
+	/*검색결과 개수 디자인*/
+	.resultNum{
+		color: rgb(100, 100, 100);
+	 	font-size: 0.8rem;
+	}
+	
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script>
@@ -251,33 +258,41 @@
 		});
 		
 		/*네비게이터(이전, 다음) 클릭이벤트*/
-		var p = <%=p%>;
-		var block = <%=block%>;
-		var lastPage = <%=lastPage%>;
-		/*몫과 나머지 구하기('다음' 클릭 제어 위해서)*/
-		var share = parseInt(lastPage/block);
-		var remain = lastPage%block;
-		var startP;
-		if(remain==0){
-			startP = (share-1)*block+1;
+		let row = <%=row%>;
+		if(row == 0){ /*조회 결과가 없을 시 페이지 네이게이터 비활성화*/
+			$(".nav").click(function(e) {e.preventDefault(); });
+			$(".nav").css("text-decoration", "none").css("color", "rgb(229, 229, 229)").css("cursor", "default");
 		}
 		else{
-			startP = share*block+1;
+			let p = <%=p%>; /*현재 페이지*/
+			let block = <%=block%>; /*페이지 블럭 개수*/
+			let lastPage = <%=lastPage%>; /*마지막 페이지*/
+			/*몫과 나머지 구하기('다음' 클릭 제어 위해서)*/
+			let share = parseInt(lastPage/block);
+			let remain = lastPage%block;
+			let startP;/*마지막 페이지가 포함된 페이지 네이게이터의 첫번째 페이지 블럭*/
+			if(remain==0){
+				startP = (share-1)*block+1;
+			}
+			else{
+				startP = share*block+1;
+			}
+			
+			if(p>=1&&p<=block){
+				$(".previous").click(function(e) {e.preventDefault(); });
+				$(".previous").css("text-decoration", "none").css("color", "rgb(229, 229, 229)").css("cursor", "default");
+			}
+			
+			if(p>=startP && p<=lastPage){
+				$(".next").click(function(e){e.preventDefault(); });
+				$(".next").css("text-decoration", "none").css("color", "rgb(229, 229, 229)").css("cursor", "default");
+			}
 		}
 		
-		if(p>=1&&p<=block){
-			$(".previous").click(function(e) {e.preventDefault(); });
-			$(".previous").css("text-decoration", "none").css("color", "rgb(229, 229, 229)").css("cursor", "default");
-		}
-		
-		if(p>=startP && p<=lastPage){
-			$(".next").click(function(e){e.preventDefault(); });
-			$(".next").css("text-decoration", "none").css("color", "rgb(229, 229, 229)").css("cursor", "default");
-		}
 		
 		/*검색버튼 이벤트*/
 		$(".input-sbtn").click(function(e){
-			if($(".input-text").val().trim()==""){
+			if($(".input-text").val().trim()==""){/*띄어쓰기만 있는 경우도 포함*/
 				alert("검색어를 입력해주세요.");
 				return false;
 			}
@@ -296,7 +311,7 @@
 		
 		
 		/*말머리 글자변경 */
-		let filter = <%=isFilter%>;
+		let filter = <%=isFilter%>; /*말머리 선택하지 않았을 시에는 '말머리' 나오도록 설정*/
 		if(filter){
 			let head = "<%=board_head%>";
 			$(".headFilter").text(head);
@@ -308,25 +323,25 @@
 		$(".listSize").text(text);
 		
 		/*글개수 변경 클릭 이벤트*/
+		let isSearch = <%=isSearch%>;
 		$(".listSizeHref").click(function(e){
 			let href="";
 			let target = $(this).text().substr(0,2);
-			let isSearch = <%=isSearch%>;
-			let isFilter = <%=isFilter%>;
-			if(isSearch&&isFilter){
+			if(isSearch){
 				href="list.jsp?type=<%=type %>&key=<%=key %>&head=<%=board_head%>&size="+target;
 			}
-			else if(!isSearch&&isFilter){
-				href="list.jsp?head=<%=board_head%>&size="+target;
-			}
-			else if(isSearch&&!isFilter){
-				href="list.jsp?type=<%=type %>&key=<%=key %>&size="+target;
-			}
 			else{
-				href="list.jsp?size="+target;
+				href="list.jsp?head=<%=board_head%>&size="+target;
 			}
 			location.href=href;
 		});
+		
+		/*검색일 경우 숨김처리*/
+		$(".searchResult").hide();
+		if(isSearch){
+			$(".noSearch").hide();
+			$(".searchResult").show();
+		}
 		
 		
 	});
@@ -338,8 +353,8 @@
 	<!-- float로 묶음 -->
 	<div class="row floatbox margin">
 		<div class="overflow">
-			<!-- 게시글 필터 -->
-			<div class="float-right">
+			<div class="float-right noSearch">
+				<!--검색일 경우에는 숨김처리 -->
 				<label class="noticelbl">
 				<input type="checkbox" class="noticeHide">
 				공지숨기기
@@ -381,6 +396,39 @@
 			</div>
 			
 			<span class="title">자유게시판</span>
+		</div>
+		
+	</div>
+	
+	<div class="row floatbox margin searchResult">
+		<div class="overflow">
+			<div class="float-right">
+				<label class="noticelbl">
+				<input type="checkbox" class="noticeHide">
+				공지숨기기
+				</label>
+				
+				<div class="dropdown">
+					<span class="listSize">목록개수&darr;</span>
+					<div class="dropdown-content">
+						<div>
+							<a class="listSizeHref">10개</a>
+						</div>
+						<div>
+							<a class="listSizeHref">15개</a>
+						</div>
+						<div>
+							<a class="listSizeHref">20개</a>
+						</div>
+						<div>
+							<a class="listSizeHref">30개</a>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			
+			<span class="resultNum">자유게시판 '<%=key %>' 검색결과 : <%=row %>건</span>
 		</div>
 		
 	</div>
@@ -447,7 +495,11 @@
 		<!-- 페이지 네비게이터 -->
 		<div class="center">
 			<ul class="pagination">
-					<li><a href="list.jsp?p=<%=startBlock-1%>&size=<%=boardSize %>" class="previous">&lt;이전</a></li>
+					<%if(isSearch){ %>
+						<li><a href="list.jsp?type=<%=type %>&key=<%=key %>&p=<%=startBlock-1%>&head=<%=board_head %>" class="previous nav">&lt;이전</a></li>
+					<%}else { %>
+						<li><a href="list.jsp?p=<%=startBlock-1%>&head=<%=board_head %>" class="previous nav">&lt;이전</a></li>
+					<%} %>
 				  	
 				  	<%for(int i=startBlock; i<=endBlock; i++) {%>
 				  		<%if(i==p){ %>
@@ -456,19 +508,19 @@
 				  			<li>
 				  		<%} %>
 				  		
-				  		<%if(isSearch && isFilter){%>
+				  		<%if(isSearch){%>
 							<a href="list.jsp?type=<%=type %>&key=<%=key %>&p=<%=i%>&head=<%=board_head%>"><%=i %></a>
-				  		<%}else if(isSearch && !isFilter){ %>
-							<a href="list.jsp?type=<%=type %>&key=<%=key %>&p=<%=i%>"><%=i %></a>
-				  		<%}else if(!isSearch && isFilter){ %>
-							<a href="list.jsp?p=<%=i%>&head=<%=board_head%>"><%=i %></a>
 				  		<%}else{ %>
-							<a href="list.jsp?p=<%=i%>"><%=i %></a>
+							<a href="list.jsp?p=<%=i%>&head=<%=board_head%>"><%=i %></a>
 				  		<%} %>
 						</li>
 				  	<%} %>
-				 
-					<li><a href="list.jsp?p=<%=endBlock+1%>" class="next">다음&gt;</a></li>
+				 	
+				 	<%if(isSearch){ %>
+						<li><a href="list.jsp?type=<%=type %>&key=<%=key %>&p=<%=endBlock+1%>&head=<%=board_head %>" class="next nav">다음&gt;</a></li>
+				 	<%}else{ %>
+						<li><a href="list.jsp?p=<%=endBlock+1%>&head=<%=board_head %>" class="next nav">다음&gt;</a></li>
+				 	<%} %>
 			</ul>
 		</div>
 	</div>
@@ -489,12 +541,15 @@
 		</select>
 		
 		<%if(isSearch) {%>
-		<input type="text" class="input input-inline input-text" name="key" value="<%=key%>" placeholder="검색어를 입력해주세요.">
+		<input type="search" class="input input-inline input-text" name="key" value="<%=key%>" placeholder="검색어를 입력해주세요.">
 		<%}else{%>
-		<input type="text" class="input input-inline input-text" name="key" placeholder="검색어를 입력해주세요.">
+		<input type="search" class="input input-inline input-text" name="key" placeholder="검색어를 입력해주세요.">
 		<%} %>
 		
 		<input type="submit" class="input input-inline input-sbtn" value="검색">
+		<%if(isSearch){ %>
+			<a href="list.jsp" class="reset">초기화&#10226;</a>
+		<%} %>
 	</form>
 	</div>
 	
