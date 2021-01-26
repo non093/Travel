@@ -27,7 +27,7 @@
 <meta charset="UTF-8">
     <title>오늘의 길</title>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/common.css">
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
 <style>
 </style>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -46,7 +46,7 @@
 	<article>
 		<aside>
 			<a href="<%=request.getContextPath()%>/index.jsp">
-				<img alt="로고 이미지" src="image/logo.png" style="width:250px; height:200px;" align="left">
+				<img alt="로고 이미지" src="image/logo.png" style="width:270px; height:270px;" align="left">
 			</a>
 			<div class="menuBtn">
         		<p>&equiv;닫힘</p>
@@ -56,13 +56,17 @@
     			<br>
     			<br>
     			<br>
+    			<br>
+    			<br>
+    			<br>
+    			<br>
     			<ul>
 					<li><a href="<%=request.getContextPath()%>/member/Board.do">전체 게시판</a></li>
 					<li><a href="<%=request.getContextPath()%>/member/Board_alert.do">공지 게시판</a></li>
 					<li><a href="<%=request.getContextPath()%>/member/Board_free.do">자유 게시판</a></li>
 					<li><a href="<%=request.getContextPath()%>/member/Board_travel.do">여행 게시판</a></li>
-					<li>전체 : <%=visitCountDAO.getVisitTotalCount()%></li>
-					<li>오늘 : <%=visitCountDAO.getVisitTodayCount()%></li>
+					<li>전체 방문자 : <%=visitCountDAO.getVisitTotalCount()%></li>
+					<li>오늘 방문자 : <%=visitCountDAO.getVisitTodayCount()%></li>
 				</ul>
     		</div>
     	</aside>

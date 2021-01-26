@@ -1,4 +1,7 @@
-article::after {
+	img{
+		border: 1px solid grey;
+	}
+	article::after {
             content:"";
             display: block;
             clear:both;
@@ -14,15 +17,14 @@ article::after {
             min-height:500px;
     }
 	div {
-		min-height: 250px;
-	} 
+		min-height: 200px;
+	}
 	header, footer, section {
 		padding:1.5rem;
 	}
     #menuArea {
-  		height: 500px;
-  		width: 250px;
- 		background-color: grey;
+  		height: 400px;
+  		width: 269px;
 	}
    	.menuBtn p {
    		position: absolute;
@@ -30,29 +32,42 @@ article::after {
    		left: 200px;
    		z-index: 1;
    		display: block;
-   		font-size:1em;
+   		font-size:1.5em;
    		color: #444;
    		cursor: pointer;
 	}
 	.dropdown {
-            background-color: #242424;
-            width:115px;
-            height:36px;
-        }
-        .dropdown > label,
-        .dropdown > a {
-            color: white;
-            text-decoration: none;
-            display:block;
-            padding:10px;
-            cursor:pointer;
-        }
-        .dropdown > a {
-            display:none;
-        }
-        .dropdown > input[type=checkbox]:checked ~ a {
-            display:block;
-        }
-        .dropdown > input[type=checkbox] {
-            display: none;
-        }
+        background-color: #242424;
+        width:115px;
+        height:36px;
+    }
+    .dropdown > label,
+    .dropdown > a {
+        color: white;
+        text-decoration: none;
+        display:block;
+        padding:10px;
+        cursor:pointer;
+    }
+    .dropdown > a {
+        display:none;
+    }
+    .dropdown > input[type=checkbox]:checked ~ a {
+        display:block;
+    }
+    .dropdown > input[type=checkbox] {
+        display: none;
+    }
+    li{
+    	margin:8px;
+    }
+    li > a {
+    	font-size:20px;
+    	font-family:굴림;
+    }
+    th{
+    	min-width:300px;
+    }
+    td{
+    	text-align: center;
+    }
