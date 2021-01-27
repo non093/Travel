@@ -27,7 +27,7 @@
 <meta charset="UTF-8">
     <title>오늘의 길</title>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/common.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="/Travel/css/main.css">
 <style>
 </style>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -46,7 +46,7 @@
 	<article>
 		<aside>
 			<a href="<%=request.getContextPath()%>/index.jsp">
-				<img alt="로고 이미지" src="image/logo.png" style="width:270px; height:270px;" align="left">
+				<img alt="로고 이미지" src="<%=request.getContextPath()%>/image/logo.png" style="width:270px; height:270px;" align="left">
 			</a>
 			<div class="menuBtn">
         		<p>&equiv;닫힘</p>
@@ -61,7 +61,7 @@
     			<br>
     			<br>
     			<ul>
-					<li><a href="<%=request.getContextPath()%>/member/Board.do">전체 게시판</a></li>
+					<li><a href="<%=request.getContextPath()%>/board/board.jsp">전체 게시판</a></li>
 					<li><a href="<%=request.getContextPath()%>/member/Board_alert.do">공지 게시판</a></li>
 					<li><a href="<%=request.getContextPath()%>/member/Board_free.do">자유 게시판</a></li>
 					<li><a href="<%=request.getContextPath()%>/member/Board_travel.do">여행 게시판</a></li>
@@ -76,8 +76,8 @@
 				<input type="text" class="input input-inline" name="key" required placeholder="검색하세요">
 				<input type="submit" class="input input-inline" value="검색">
 				<%if(!isLogin){ %>
-					<a href="<%=request.getContextPath()%>/member/login.jsp">로그인</a>
-					<a href="<%=request.getContextPath()%>/member/join.jsp">회원가입</a>
+					<a href="<%=request.getContextPath()%>/member/login.jsp"><input type="button" value="로그인"></a>
+					<a href="<%=request.getContextPath()%>/member/join.jsp"><input type="button" value="회원가입"></a>
 				<%}else{ %>
 					<div class="dropdown">
 				        <label for="ck">아이디</label>
@@ -87,7 +87,7 @@
 				    </div>
 				<%} %>
 				<%if(isAdmin){ %>
-					<a href="<%=request.getContextPath()%>/admin/home.jsp">관리메뉴</a>
+					<a href="<%=request.getContextPath()%>/admin/home.jsp"><input type="button" value="관리메뉴"></a>
 				<%} %>
 			</form>
 		</div>

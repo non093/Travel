@@ -51,6 +51,7 @@
     }
     .dropdown > a {
         display:none;
+        
     }
     .dropdown > input[type=checkbox]:checked ~ a {
         display:block;
@@ -62,6 +63,7 @@
     	margin:8px;
     }
     li > a {
+    	text-decoration: none;
     	font-size:20px;
     	font-family:굴림;
     }
