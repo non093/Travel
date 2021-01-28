@@ -8,7 +8,7 @@
 	request.setCharacterEncoding("UTF-8");
 %>
 <%
-	BoardDao freeBoardDao = new BoardDao();
+	BoardDao entireBoardDao = new BoardDao();
 	//카테고리 지정
 	String cate = request.getParameter("cate");
 	if(Objects.nonNull(cate)){
@@ -17,11 +17,11 @@
 	else{
 		cate = (String)session.getAttribute("cate");
 	}
-	freeBoardDao.setCate(cate);
+	entireBoardDao.setCate(cate);
 	
 	//공지사항 목록 구하기, 공지사항 개수 확인
-	List<BoardDto> noticeList = freeBoardDao.selectedNotice();
-	int noticeNum = freeBoardDao.selectedNoticeNum();
+	List<BoardDto> noticeList = entireBoardDao.selectedNotice();
+	int noticeNum = entireBoardDao.selectedNoticeNum();
 	
 	String type = request.getParameter("type"); 
 	String key = request.getParameter("key");
@@ -29,7 +29,7 @@
 	boolean isSearch = type != null && key != null;
 	boolean isFilter = board_head != null;
 	//url로 이상한 값 들어온 경우 처리
-	if(freeBoardDao.checkIsNotHead(board_head)){
+	if(entireBoardDao.checkIsNotHead(board_head)){
 		board_head = "전체";
 	}
 %> 
@@ -52,10 +52,10 @@
    	//목록개수
    	int row;
    	if(isSearch){
-   		row = freeBoardDao.selectCount(type, key, board_head);
+   		row = entireBoardDao.selectEntireCount(type, key, board_head);
    	}
    	else{
-   		row = freeBoardDao.selectCount(board_head); 
+   		row = entireBoardDao.selectEntireCount(board_head); 
    	}
    	int lastPage = (row + boardSize - 1)/boardSize;
    	
@@ -83,12 +83,12 @@
 <%
 	//페이지 번호에 따른 게시글 목록 출력
 	//검색
-	List<BoardDto> freeList;
+	List<BoardDto> entireList;
 	if(isSearch){ 
-		freeList = freeBoardDao.selectByPage(startRow, endRow, type, key, board_head); 
+		entireList = entireBoardDao.selectEntire(startRow, endRow, type, key, board_head); 
 	}
 	else{
-		freeList = freeBoardDao.selectByPage(startRow, endRow, board_head); 
+		entireList = entireBoardDao.selectEntire(startRow, endRow, board_head); 
 	}
 %>
 
@@ -238,10 +238,10 @@
 							<a class="headHref">전체</a>
 						</div>
 						<div>
-							<a class="headHref">사담</a>
+							<a class="headHref">자유</a>
 						</div>
 						<div>
-							<a class="headHref">질문</a>
+							<a class="headHref">여행</a>
 						</div>
 					</div>
 				</div>
@@ -266,7 +266,7 @@
 				
 			</div>
 			
-			<span class="title">자유게시판</span>
+			<span class="title">전체게시판</span>
 		</div>
 		
 	</div>
@@ -346,7 +346,7 @@
 		<!-- 게시글 목록 출력 -->
 		<tbody class="listBlock">
 			<%
-				if(freeList.isEmpty()){
+				if(entireList.isEmpty()){
 					if(isSearch){ %>
 						<tr><td colspan="6">검색결과가 존재하지 않습니다.</td></tr>
 					<%}else{ %>
@@ -356,17 +356,17 @@
 				}else{
 			%>
 				<%
-					for(BoardDto freeDto : freeList){
+					for(BoardDto entireDto : entireList){
 				%>
 				<tr>
-					<td class="head-color"><%=freeDto.getBoard_head() %></td>
+					<td width="10%" class="head-color"><%=entireDto.getBoard_head() %></td>
 					<td width="50%" class="left">
-						<a href="detail.jsp?board_no=<%=freeDto.getBoard_no() %>"><%=freeDto.getBoard_title() %></a>
+						<a href="detail.jsp?board_no=<%=entireDto.getBoard_no() %>"><%=entireDto.getBoard_title() %></a>
 					</td>
-					<td><%=freeDto.getBoard_nick() %></td>
-					<td><%=freeDto.getBoard_date() %></td>
-					<td><%=freeDto.getBoard_view() %></td>
-					<td><%=freeDto.getBoard_like() %></td>
+					<td><%=entireDto.getBoard_nick() %></td>
+					<td><%=entireDto.getBoard_date() %></td>
+					<td><%=entireDto.getBoard_view() %></td>
+					<td><%=entireDto.getBoard_like() %></td>
 				</tr>
 				<%} %>
 			<%} %>
@@ -419,8 +419,8 @@
 		
 		<select class="input input-inline input-select searchHead" name="head">
 		<option>전체</option>
-		<option>사담</option>
-		<option>질문</option>
+		<option>자유</option>
+		<option>여행</option>
 		</select>
 		
 		<select class="input input-inline input-select" name="type">

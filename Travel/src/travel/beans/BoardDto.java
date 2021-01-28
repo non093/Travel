@@ -2,7 +2,7 @@ package travel.beans;
 
 import java.sql.Date;
 
-public class FreeBoardDto {
+public class BoardDto {
 	private int board_no;
 	private String board_nick;
 	private String board_cate;
@@ -12,7 +12,7 @@ public class FreeBoardDto {
 	private Date board_date;
 	private int board_view;
 	private int board_like;
-	public FreeBoardDto() {
+	public BoardDto() {
 		super();
 	}
 	public int getBoard_no() {

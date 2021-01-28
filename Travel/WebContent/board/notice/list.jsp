@@ -8,7 +8,7 @@
 	request.setCharacterEncoding("UTF-8");
 %>
 <%
-	BoardDao freeBoardDao = new BoardDao();
+	BoardDao noticeBoardDao = new BoardDao();
 	//카테고리 지정
 	String cate = request.getParameter("cate");
 	if(Objects.nonNull(cate)){
@@ -17,21 +17,15 @@
 	else{
 		cate = (String)session.getAttribute("cate");
 	}
-	freeBoardDao.setCate(cate);
+	noticeBoardDao.setCate(cate);
 	
 	//공지사항 목록 구하기, 공지사항 개수 확인
-	List<BoardDto> noticeList = freeBoardDao.selectedNotice();
-	int noticeNum = freeBoardDao.selectedNoticeNum();
+	List<BoardDto> noticeList = noticeBoardDao.selectedNotice();
+	int noticeNum = noticeBoardDao.selectedNoticeNum();
 	
 	String type = request.getParameter("type"); 
 	String key = request.getParameter("key");
-	String board_head = request.getParameter("head");
 	boolean isSearch = type != null && key != null;
-	boolean isFilter = board_head != null;
-	//url로 이상한 값 들어온 경우 처리
-	if(freeBoardDao.checkIsNotHead(board_head)){
-		board_head = "전체";
-	}
 %> 
   
 <%
@@ -52,10 +46,10 @@
    	//목록개수
    	int row;
    	if(isSearch){
-   		row = freeBoardDao.selectCount(type, key, board_head);
+   		row = noticeBoardDao.selectNoticeCount(type, key);
    	}
    	else{
-   		row = freeBoardDao.selectCount(board_head); 
+   		row = noticeBoardDao.selectNoticeCount(); 
    	}
    	int lastPage = (row + boardSize - 1)/boardSize;
    	
@@ -66,7 +60,7 @@
    		if(p<1) throw new Exception();
    	}
    	catch(Exception e){
-   	p=1;
+   		p=1;
    	}
    	int endRow = p*boardSize;
    	int startRow = endRow - boardSize + 1;
@@ -83,12 +77,12 @@
 <%
 	//페이지 번호에 따른 게시글 목록 출력
 	//검색
-	List<BoardDto> freeList;
+	List<BoardDto> noticeBoardList;
 	if(isSearch){ 
-		freeList = freeBoardDao.selectByPage(startRow, endRow, type, key, board_head); 
+		noticeBoardList = noticeBoardDao.selectNotice(startRow, endRow, type, key); 
 	}
 	else{
-		freeList = freeBoardDao.selectByPage(startRow, endRow, board_head); 
+		noticeBoardList = noticeBoardDao.selectNotice(startRow, endRow); 
 	}
 %>
 
@@ -161,27 +155,7 @@
 		}
 		
 		
-		/*말머리 글자변경 */
-		let filter = <%=isFilter%>; /*말머리 선택하지 않았을 시에는 '말머리' 나오도록 설정*/
-		if(filter){
-			let head = "<%=board_head%>";
-			$(".headFilter").text(head);
-		}
-		
 		let isSearch = <%=isSearch%>;
-		
-		/*말머리 클릭 이벤트*/
-		$(".headHref").click(function(e){
-			let href="";
-			let target = $(this).text();
-			if(isSearch){
-				href="list.jsp?type=<%=type%>&key=<%=key%>&head="+target;
-			}
-			else{
-				href="list.jsp?head="+target;
-			}
-			location.href=href;
-		});
 		
 		/*글개수 글자변경 */
 		let listSize = <%=boardSize%>;
@@ -193,10 +167,10 @@
 			let href="";
 			let target = $(this).text().substr(0,2);
 			if(isSearch){
-				href="list.jsp?type=<%=type%>&key=<%=key%>&head=<%=board_head%>&size="+target;
+				href="list.jsp?type=<%=type%>&key=<%=key%>&size="+target;
 			}
 			else{
-				href="list.jsp?head=<%=board_head%>&size="+target;
+				href="list.jsp?size="+target;
 			}
 			location.href=href;
 		});
@@ -208,13 +182,6 @@
 			$(".searchResult").show();
 		}
 		
-		/*검색창 선택 처리*/
-		let head = '<%=board_head%>';
-		$(".searchHead option").each(function(index, item){
-			if(head == $(item).text()){
-				$(item).prop("selected", true);	
-			}
-		});
 	});
 </script>
 </head>
@@ -230,21 +197,6 @@
 				<input type="checkbox" class="noticeHide">
 				공지숨기기
 				</label>
-				
-				<div class="dropdown center">
-					<span class="headFilter">말머리&darr;</span>
-					<div class="dropdown-content">
-						<div>
-							<a class="headHref">전체</a>
-						</div>
-						<div>
-							<a class="headHref">사담</a>
-						</div>
-						<div>
-							<a class="headHref">질문</a>
-						</div>
-					</div>
-				</div>
 				
 				<div class="dropdown">
 					<span class="listSize">목록개수&darr;</span>
@@ -266,7 +218,7 @@
 				
 			</div>
 			
-			<span class="title">자유게시판</span>
+			<span class="title">공지사항</span>
 		</div>
 		
 	</div>
@@ -299,7 +251,7 @@
 				
 			</div>
 			
-			<span class="resultNum">자유게시판 '<%=key%>' 검색결과 : <%=row%>건</span>
+			<span class="resultNum">공지사항 '<%=key%>' 검색결과 : <%=row%>건</span>
 		</div>
 		
 	</div>
@@ -345,31 +297,22 @@
 			
 		<!-- 게시글 목록 출력 -->
 		<tbody class="listBlock">
-			<%
-				if(freeList.isEmpty()){
-					if(isSearch){ %>
-						<tr><td colspan="6">검색결과가 존재하지 않습니다.</td></tr>
-					<%}else{ %>
-						<tr><td colspan="6">게시물이 존재하지 않습니다.</td></tr>
-					<%} %>
-			<%
-				}else{
-			%>
-				<%
-					for(BoardDto freeDto : freeList){
-				%>
-				<tr>
-					<td class="head-color"><%=freeDto.getBoard_head() %></td>
-					<td width="50%" class="left">
-						<a href="detail.jsp?board_no=<%=freeDto.getBoard_no() %>"><%=freeDto.getBoard_title() %></a>
-					</td>
-					<td><%=freeDto.getBoard_nick() %></td>
-					<td><%=freeDto.getBoard_date() %></td>
-					<td><%=freeDto.getBoard_view() %></td>
-					<td><%=freeDto.getBoard_like() %></td>
-				</tr>
-				<%} %>
-			<%} %>
+			<% if(noticeBoardList.isEmpty() && isSearch){ %>
+					<tr><td colspan="6">검색결과가 존재하지 않습니다.</td></tr>
+			<%}else{
+					for(BoardDto noticeDto : noticeBoardList){ %>
+					<tr>
+						<td width="10%" class="head-color"><%=noticeDto.getBoard_head() %></td>
+						<td width="50%" class="left">
+							<a href="detail.jsp?board_no=<%=noticeDto.getBoard_no() %>"><%=noticeDto.getBoard_title() %></a>
+						</td>
+						<td><%=noticeDto.getBoard_nick() %></td>
+						<td><%=noticeDto.getBoard_date() %></td>
+						<td><%=noticeDto.getBoard_view() %></td>
+						<td><%=noticeDto.getBoard_like() %></td>
+					</tr>
+				<% }%>
+			<%} %> 
 		</tbody>
 		
 		</table>
@@ -384,9 +327,9 @@
 		<div class="center">
 			<ul class="pagination">
 					<%if(isSearch){ %>
-						<li><a href="list.jsp?type=<%=type %>&key=<%=key %>&p=<%=startBlock-1%>&head=<%=board_head %>" class="previous nav">&lt;이전</a></li>
+						<li><a href="list.jsp?type=<%=type %>&key=<%=key %>&p=<%=startBlock-1%>" class="previous nav">&lt;이전</a></li>
 					<%}else { %>
-						<li><a href="list.jsp?p=<%=startBlock-1%>&head=<%=board_head %>" class="previous nav">&lt;이전</a></li>
+						<li><a href="list.jsp?p=<%=startBlock-1%>" class="previous nav">&lt;이전</a></li>
 					<%} %>
 				  	
 				  	<%for(int i=startBlock; i<=endBlock; i++) {%>
@@ -397,17 +340,17 @@
 				  		<%} %>
 				  		
 				  		<%if(isSearch){%>
-							<a href="list.jsp?type=<%=type %>&key=<%=key %>&p=<%=i%>&head=<%=board_head%>"><%=i %></a>
+							<a href="list.jsp?type=<%=type %>&key=<%=key %>&p=<%=i%>"><%=i %></a>
 				  		<%}else{ %>
-							<a href="list.jsp?p=<%=i%>&head=<%=board_head%>"><%=i %></a>
+							<a href="list.jsp?p=<%=i%>"><%=i %></a>
 				  		<%} %>
 						</li>
 				  	<%} %>
 				 	
 				 	<%if(isSearch){ %>
-						<li><a href="list.jsp?type=<%=type %>&key=<%=key %>&p=<%=endBlock+1%>&head=<%=board_head %>" class="next nav">다음&gt;</a></li>
+						<li><a href="list.jsp?type=<%=type %>&key=<%=key %>&p=<%=endBlock+1%>" class="next nav">다음&gt;</a></li>
 				 	<%}else{ %>
-						<li><a href="list.jsp?p=<%=endBlock+1%>&head=<%=board_head %>" class="next nav">다음&gt;</a></li>
+						<li><a href="list.jsp?p=<%=endBlock+1%>" class="next nav">다음&gt;</a></li>
 				 	<%} %>
 			</ul>
 		</div>
@@ -416,12 +359,6 @@
 	<!-- 검색창 -->
 	<div class="row center div-search">
 	<form action="list.jsp" method="post">
-		
-		<select class="input input-inline input-select searchHead" name="head">
-		<option>전체</option>
-		<option>사담</option>
-		<option>질문</option>
-		</select>
 		
 		<select class="input input-inline input-select" name="type">
 		<option value="board_title" <%if(isSearch && type.equals("board_title")){ %>selected<%} %>>제목</option>

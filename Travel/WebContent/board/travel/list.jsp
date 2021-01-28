@@ -8,7 +8,7 @@
 	request.setCharacterEncoding("UTF-8");
 %>
 <%
-	BoardDao freeBoardDao = new BoardDao();
+	BoardDao travelBoardDao = new BoardDao();
 	//카테고리 지정
 	String cate = request.getParameter("cate");
 	if(Objects.nonNull(cate)){
@@ -17,11 +17,11 @@
 	else{
 		cate = (String)session.getAttribute("cate");
 	}
-	freeBoardDao.setCate(cate);
+	travelBoardDao.setCate(cate);
 	
 	//공지사항 목록 구하기, 공지사항 개수 확인
-	List<BoardDto> noticeList = freeBoardDao.selectedNotice();
-	int noticeNum = freeBoardDao.selectedNoticeNum();
+	List<BoardDto> noticeList = travelBoardDao.selectedNotice();
+	int noticeNum = travelBoardDao.selectedNoticeNum();
 	
 	String type = request.getParameter("type"); 
 	String key = request.getParameter("key");
@@ -29,7 +29,7 @@
 	boolean isSearch = type != null && key != null;
 	boolean isFilter = board_head != null;
 	//url로 이상한 값 들어온 경우 처리
-	if(freeBoardDao.checkIsNotHead(board_head)){
+	if(travelBoardDao.checkIsNotHead(board_head)){
 		board_head = "전체";
 	}
 %> 
@@ -52,10 +52,10 @@
    	//목록개수
    	int row;
    	if(isSearch){
-   		row = freeBoardDao.selectCount(type, key, board_head);
+   		row = travelBoardDao.selectCount(type, key, board_head);
    	}
    	else{
-   		row = freeBoardDao.selectCount(board_head); 
+   		row = travelBoardDao.selectCount(board_head); 
    	}
    	int lastPage = (row + boardSize - 1)/boardSize;
    	
@@ -83,12 +83,12 @@
 <%
 	//페이지 번호에 따른 게시글 목록 출력
 	//검색
-	List<BoardDto> freeList;
+	List<BoardDto> travelList;
 	if(isSearch){ 
-		freeList = freeBoardDao.selectByPage(startRow, endRow, type, key, board_head); 
+		travelList = travelBoardDao.selectByPage(startRow, endRow, type, key, board_head); 
 	}
 	else{
-		freeList = freeBoardDao.selectByPage(startRow, endRow, board_head); 
+		travelList = travelBoardDao.selectByPage(startRow, endRow, board_head); 
 	}
 %>
 
@@ -161,14 +161,14 @@
 		}
 		
 		
+		let isSearch = <%=isSearch%>;
+		
 		/*말머리 글자변경 */
 		let filter = <%=isFilter%>; /*말머리 선택하지 않았을 시에는 '말머리' 나오도록 설정*/
 		if(filter){
 			let head = "<%=board_head%>";
 			$(".headFilter").text(head);
 		}
-		
-		let isSearch = <%=isSearch%>;
 		
 		/*말머리 클릭 이벤트*/
 		$(".headHref").click(function(e){
@@ -215,6 +215,7 @@
 				$(item).prop("selected", true);	
 			}
 		});
+		
 	});
 </script>
 </head>
@@ -238,10 +239,55 @@
 							<a class="headHref">전체</a>
 						</div>
 						<div>
-							<a class="headHref">사담</a>
+							<a class="headHref">강원도</a>
 						</div>
 						<div>
-							<a class="headHref">질문</a>
+							<a class="headHref">서울</a>
+						</div>
+						<div>
+							<a class="headHref">인천</a>
+						</div>
+						<div>
+							<a class="headHref">경기도</a>
+						</div>
+						<div>
+							<a class="headHref">충남</a>
+						</div>
+						<div>
+							<a class="headHref">충북</a>
+						</div>
+						<div>
+							<a class="headHref">경남</a>
+						</div>
+						<div>
+							<a class="headHref">경북</a>
+						</div>
+						<div>
+							<a class="headHref">대구</a>
+						</div>
+						<div>
+							<a class="headHref">대전</a>
+						</div>
+						<div>
+							<a class="headHref">세종</a>
+						</div>
+						<div>
+							<a class="headHref">울산</a>
+						</div>
+						<div>
+							<a class="headHref">부산</a>
+						</div>
+						<div>
+							<a class="headHref">전북</a>
+						</div>
+						<div>
+							<a class="headHref">전남</a>
+						</div>
+						<div>
+							<a class="headHref">광주</a>
+						</div>
+						<div>
+							<a class="headHref">제주도</a>
 						</div>
 					</div>
 				</div>
@@ -266,7 +312,7 @@
 				
 			</div>
 			
-			<span class="title">자유게시판</span>
+			<span class="title">여행게시판</span>
 		</div>
 		
 	</div>
@@ -309,7 +355,7 @@
 		<table class="table">
 		<thead>
 			<tr>
-			<th width="55%" colspan="2"></th>
+			<th width="90%" colspan="2"></th>
 			<th>글쓴이</th>
 			<th>작성일</th>
 			<th>조회</th>
@@ -346,27 +392,28 @@
 		<!-- 게시글 목록 출력 -->
 		<tbody class="listBlock">
 			<%
-				if(freeList.isEmpty()){
+				if(travelList.isEmpty()){
 					if(isSearch){ %>
 						<tr><td colspan="6">검색결과가 존재하지 않습니다.</td></tr>
 					<%}else{ %>
 						<tr><td colspan="6">게시물이 존재하지 않습니다.</td></tr>
 					<%} %>
+			
 			<%
 				}else{
 			%>
 				<%
-					for(BoardDto freeDto : freeList){
+					for(BoardDto travelDto : travelList){
 				%>
 				<tr>
-					<td class="head-color"><%=freeDto.getBoard_head() %></td>
+					<td width="10%" class="head-color"><%=travelDto.getBoard_head() %></td>
 					<td width="50%" class="left">
-						<a href="detail.jsp?board_no=<%=freeDto.getBoard_no() %>"><%=freeDto.getBoard_title() %></a>
+						<a href="detail.jsp?board_no=<%=travelDto.getBoard_no() %>"><%=travelDto.getBoard_title() %></a>
 					</td>
-					<td><%=freeDto.getBoard_nick() %></td>
-					<td><%=freeDto.getBoard_date() %></td>
-					<td><%=freeDto.getBoard_view() %></td>
-					<td><%=freeDto.getBoard_like() %></td>
+					<td><%=travelDto.getBoard_nick() %></td>
+					<td><%=travelDto.getBoard_date() %></td>
+					<td><%=travelDto.getBoard_view() %></td>
+					<td><%=travelDto.getBoard_like() %></td>
 				</tr>
 				<%} %>
 			<%} %>
@@ -419,8 +466,23 @@
 		
 		<select class="input input-inline input-select searchHead" name="head">
 		<option>전체</option>
-		<option>사담</option>
-		<option>질문</option>
+		<option>경기도</option>
+		<option>서울</option>
+		<option>인천</option>
+		<option>강원도</option>
+		<option>경북</option>
+		<option>경남</option>
+		<option>충북</option>
+		<option>충남</option>
+		<option>대전</option>
+		<option>대구</option>
+		<option>세종</option>
+		<option>전남</option>
+		<option>전북</option>
+		<option>울산</option>
+		<option>부산</option>
+		<option>광주</option>
+		<option>제주도</option>
 		</select>
 		
 		<select class="input input-inline input-select" name="type">
