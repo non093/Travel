@@ -59,7 +59,7 @@
     .dropdown > input[type=checkbox] {
         display: none;
     }
-    li{
+    aside > li{
     	margin:8px;
     }
     li > a {
