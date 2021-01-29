@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+
 <%
 	//사용자가 로그인 상태인지 계산하는 코드
 	//로그인 상태 : session 에 check 라는 이름의 값이 존재할 경우(null이 아닌 경우)
@@ -193,6 +194,5 @@
 	</div>
 	
 	</header>
-	
 	
 	
