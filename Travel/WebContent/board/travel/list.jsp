@@ -244,52 +244,52 @@
 							<a class="headHref">전체</a>
 						</div>
 						<div>
-							<a class="headHref">강원도</a>
-						</div>
-						<div>
 							<a class="headHref">서울</a>
 						</div>
 						<div>
-							<a class="headHref">인천</a>
-						</div>
-						<div>
-							<a class="headHref">경기도</a>
-						</div>
-						<div>
-							<a class="headHref">충남</a>
-						</div>
-						<div>
-							<a class="headHref">충북</a>
-						</div>
-						<div>
-							<a class="headHref">경남</a>
-						</div>
-						<div>
-							<a class="headHref">경북</a>
+							<a class="headHref">부산</a>
 						</div>
 						<div>
 							<a class="headHref">대구</a>
 						</div>
 						<div>
-							<a class="headHref">대전</a>
+							<a class="headHref">인천</a>
 						</div>
 						<div>
-							<a class="headHref">세종</a>
+							<a class="headHref">광주</a>
+						</div>
+						<div>
+							<a class="headHref">대전</a>
 						</div>
 						<div>
 							<a class="headHref">울산</a>
 						</div>
 						<div>
-							<a class="headHref">부산</a>
+							<a class="headHref">세종</a>
+						</div>
+						<div>
+							<a class="headHref">경기도</a>
+						</div>
+						<div>
+							<a class="headHref">강원도</a>
+						</div>
+						<div>
+							<a class="headHref">충북</a>
+						</div>
+						<div>
+							<a class="headHref">충남</a>
+						</div>
+						<div>
+							<a class="headHref">경북</a>
+						</div>
+						<div>
+							<a class="headHref">경남</a>
 						</div>
 						<div>
 							<a class="headHref">전북</a>
 						</div>
 						<div>
 							<a class="headHref">전남</a>
-						</div>
-						<div>
-							<a class="headHref">광주</a>
 						</div>
 						<div>
 							<a class="headHref">제주도</a>
@@ -471,22 +471,22 @@
 		
 		<select class="input input-inline input-select searchHead" name="head">
 		<option>전체</option>
-		<option>경기도</option>
 		<option>서울</option>
+		<option>부산</option>
+		<option>대구</option>
 		<option>인천</option>
+		<option>광주</option>
+		<option>대전</option>
+		<option>울산</option>
+		<option>세종</option>
+		<option>경기도</option>
 		<option>강원도</option>
-		<option>경북</option>
-		<option>경남</option>
 		<option>충북</option>
 		<option>충남</option>
-		<option>대전</option>
-		<option>대구</option>
-		<option>세종</option>
-		<option>전남</option>
+		<option>경북</option>
+		<option>경남</option>
 		<option>전북</option>
-		<option>울산</option>
-		<option>부산</option>
-		<option>광주</option>
+		<option>전남</option>
 		<option>제주도</option>
 		</select>
 		
