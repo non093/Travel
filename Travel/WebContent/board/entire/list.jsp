@@ -16,7 +16,8 @@
 	}
 	else{
 		if(Objects.isNull(session.getAttribute("cate"))){//세션 만료시 재설정
-			session.setAttribute("cate", "전체");
+			cate="전체";
+			session.setAttribute("cate", cate);
 		}
 		else{
 			cate = (String)session.getAttribute("cate");
@@ -434,9 +435,9 @@
 		</select>
 		
 		<%if(isSearch) {%>
-		<input type="search" class="input input-inline input-text" name="key" value="<%=key%>" placeholder="검색어를 입력해주세요.">
+		<input type="search" class="input input-inline input-text" name="key" value="<%=key%>" placeholder="검색어를 입력해주세요." maxlength="20">
 		<%}else{%>
-		<input type="search" class="input input-inline input-text" name="key" placeholder="검색어를 입력해주세요.">
+		<input type="search" class="input input-inline input-text" name="key" placeholder="검색어를 입력해주세요." maxlength="20">
 		<%} %>
 		
 		<input type="submit" class="input input-inline input-sbtn" value="검색">
