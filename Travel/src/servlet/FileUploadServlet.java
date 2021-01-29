@@ -49,7 +49,7 @@ public class FileUploadServlet extends HttpServlet{
 		fileDao.delete(member_no);
 		fileDao.insert(fileDto);
 		
-		resp.sendRedirect("my.jsp");
+		resp.sendRedirect("upload.jsp");
 		}
 		
 		catch(Exception e) {

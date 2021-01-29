@@ -1,7 +1,4 @@
 
-<jsp:include page="/template/footer.jsp"></jsp:include>
-<!-- footer.jsp를 여기다 부른다 -->	
-=======
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     

@@ -1,0 +1,92 @@
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+input:focus {
+		     outline: none;
+        }
+ .mem_row {
+             margin: 1.5rem 0;
+         }
+         
+.logo_img{
+ 			 width : 400px;
+ 			 height: 300px;
+             display: block;
+             margin : 0 auto;
+         }
+         
+.profile_img{
+			border-radius: 50%;
+ 			width: 200px;
+    		height: 200px;
+            display: block;
+            margin : 2rem auto;
+
+        }
+        
+.mem_outbox {
+             width: 400px;
+             display : block;
+     		margin : auto auto; 
+             padding: 0;
+         }
+         
+label{
+            font-weight:bold;
+            font-size: 17px;
+        }
+ 
+a{
+            text-decoration-line: none;
+            color:black;
+            margin : 0;
+        }
+a:hover{
+            color: gray;
+        }
+ .mem_input{
+            height: 50px;
+            width: 400px;
+            font-size: 15px;
+        }
+ .mem_input.submit {
+            width: 400px;
+            height: 50px;
+            padding: 0;
+            border: none;
+            background-color: rgb(250, 195, 19);
+            color: white;
+            font-size: 16px;
+         }
+
+.btn {
+            border: none;
+            height: 50px;
+            background-color: transparent;
+            color: black;
+            font-weight: 100;
+            font-size: 14px;
+            padding : 0;
+            float : right;
+        }
+
+.btn.btn_hover:hover {
+            color: rgb(250, 195, 19);
+            font-weight: 500;
+        }
+.error{
+			color:red;
+       		font-weight : normal;
+	
+}
+ 
+ .mem_menu{
+           margin: 1rem 0;
+       }  
+   

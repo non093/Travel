@@ -28,25 +28,25 @@ public class MemberLoginServlet extends HttpServlet{
 		MemberDao memberDao = new MemberDao();
 		boolean login = memberDao.login(memberDto);
 		
-//		//관리자 로그인
-//		AdminDao adminDao = new AdminDao();
-//		AdminDto adminDto = new AdminDto();
-//		adminDto.setAdmin_id(req.getParameter("member_id"));
-//		adminDto.setAdmin_pw(req.getParameter("member_pw"));
-//		
-//		boolean adminLogin = adminDao.adminLogin(adminDto);
+		//관리자 로그인
+		AdminDao adminDao = new AdminDao();
+		AdminDto adminDto = new AdminDto();
+		adminDto.setAdmin_id(req.getParameter("member_id"));
+		adminDto.setAdmin_pw(req.getParameter("member_pw"));
+		
+		boolean adminLogin = adminDao.adminLogin(adminDto);
 		
 		if(login) {     
 			MemberDto m = memberDao.find(memberDto.getMember_id());
 			req.getSession().setAttribute("check", m.getMember_no());
 			resp.sendRedirect("../index.jsp");
 		}
-//		else if(adminLogin) {
-//			AdminDto admin = adminDao.adminFind(adminDto.getAdmin_id(), adminDto.getAdmin_pw());
-//			req.getSession().setAttribute("auth", admin.getAdmin_id());
-//			resp.sendRedirect("../index.jsp");
-//
-//		}
+		else if(adminLogin) {
+			AdminDto admin = adminDao.adminFind(adminDto.getAdmin_id(), adminDto.getAdmin_pw());
+			req.getSession().setAttribute("auth", admin.getAdmin_id());
+			resp.sendRedirect("../index.jsp");
+
+		}
 		else {
 			resp.sendRedirect("login.jsp?error");
 		}

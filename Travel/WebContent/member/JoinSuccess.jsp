@@ -1,8 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
-<jsp:include page="/template/header.jsp"></jsp:include>
- 
-<h1>회원 가입 성공</h1>
-<a href="login.jsp">로그인</a>
-<jsp:include page="/template/footer.jsp"></jsp:include>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+     <script>
+    	$(function(){
+    		$(document).ready(function() { 
+    			if(confirm("회원가입 성공\n로그인 하시겠습니까?")){
+    				
+				location.replace("login.jsp");
+				}
+				else{
+				location.replace("<%=request.getContextPath()%>");
+				} 
+    		});		
+    	});
+    </script>
+
+	
