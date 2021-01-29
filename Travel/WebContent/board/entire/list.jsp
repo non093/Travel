@@ -15,7 +15,12 @@
 		session.setAttribute("cate", request.getParameter("cate"));
 	}
 	else{
-		cate = (String)session.getAttribute("cate");
+		if(Objects.isNull(session.getAttribute("cate"))){//세션 만료시 재설정
+			session.setAttribute("cate", "전체");
+		}
+		else{
+			cate = (String)session.getAttribute("cate");
+		}
 	}
 	entireBoardDao.setCate(cate);
 	
