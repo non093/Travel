@@ -6,11 +6,11 @@
 <jsp:include page="/template/header.jsp"></jsp:include>
 
 <%
-	// 관리자 계정으로 회원정보 불러오기
 	
 	int member_no = Integer.parseInt(request.getParameter("member_no"));
 	AdminDao adminDao = new AdminDao();
-	MemberDto memberDto = adminDao.find(member_no); 
+	MemberDto memberDto = adminDao.memberSearch(member_no); 
+
 %>
 
 
@@ -26,8 +26,8 @@
 					<td><%=memberDto.getMember_no()%></td>
 				</tr>
 				<tr>
-					<th>프로필 사진</th>
-					<td height="60px"><%=memberDto.getMember_image()%></td>
+					<th>프로필<br>이미지</th>
+					<td height="150px"></td>
 				</tr>
 				<tr>
 					<th>아이디</th>
@@ -38,6 +38,10 @@
 					<td><%=memberDto.getMember_nick()%></td>
 				</tr>
 				<tr>
+					<th>등급</th>
+					<td><%=memberDto.getMember_auth()%></td>
+				</tr>
+				<tr>
 					<th>이메일</th>
 					<td><%=memberDto.getMember_email()%></td>
 				</tr>
@@ -45,6 +49,7 @@
 					<th>가입일</th>
 					<td><%=memberDto.getMember_date()%></td>
 				</tr>
+			
 				
 			</tbody> 
 		</table>
@@ -52,7 +57,7 @@
 	
 	
 	<div class="row center">
-		<a href="list.jsp">목록으로 돌아가기</a>
+		<a href="adminMemberList.jsp">목록으로 돌아가기</a>
 	</div>
 </div>
 

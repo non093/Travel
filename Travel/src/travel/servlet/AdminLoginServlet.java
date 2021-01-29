@@ -23,6 +23,9 @@ public class AdminLoginServlet extends HttpServlet{
 			
 			adminDto.setAdmin_id(req.getParameter("admin_id"));
 			adminDto.setAdmin_pw(req.getParameter("admin_pw"));
+		
+			
+			
 			
 			AdminDao adminDao = new AdminDao();
 			boolean login = adminDao.login(adminDto);
@@ -31,10 +34,11 @@ public class AdminLoginServlet extends HttpServlet{
 				AdminDto ad = adminDao.find(adminDto.getAdmin_id());
 				req.getSession().setAttribute("check", ad.getAdmin_no());
 				req.getSession().setAttribute("auth", ad.getAdmin_auth());
+				
 				resp.sendRedirect("../index.jsp");
 			}
 			else {
-				resp.sendRedirect("admin_login.jsp?error");
+				resp.sendRedirect("adminLogin.jsp?error");
 			}
 			
 		}

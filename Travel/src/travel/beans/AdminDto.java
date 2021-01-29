@@ -8,6 +8,9 @@ public class AdminDto {
 	private String admin_auth;
 	
 	
+	
+	
+
 	public AdminDto() {
 		super();
 	}
@@ -66,6 +69,7 @@ public class AdminDto {
 	}
 	
 	
-	
+
+		
 
 }

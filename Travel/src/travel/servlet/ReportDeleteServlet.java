@@ -8,20 +8,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import travel.beans.AdminDao;
+import travel.beans.ReportDao;
 
-@WebServlet(urlPatterns = "/admin/adminDelete.do")
-public class AdminDeleteServlet extends HttpServlet{
+@WebServlet(urlPatterns = "/admin/reportDelete.do")
+public class ReportDeleteServlet extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
-			int member_no = Integer.parseInt(req.getParameter("member_no"));
+			int report_no = Integer.parseInt(req.getParameter("report_no"));
 			
-			AdminDao adminDao = new AdminDao();
-			boolean result = adminDao.memberDelete(member_no);
+			ReportDao adminBoardDao = new ReportDao();
+			boolean result = adminBoardDao.reportDelete(report_no);
 			
 			if(result) {
-				resp.sendRedirect("adminMemberList.jsp");
+				resp.sendRedirect("reportList.jsp");
 			}
 			else {
 				resp.sendError(404);
