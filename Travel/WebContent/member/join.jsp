@@ -1,11 +1,8 @@
 <%@page import="beans.MemberDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%-- <jsp:include page="/template/header.jsp"></jsp:include>
-  <jsp:include page="/template/side.jsp"></jsp:include> --%>
-  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/member.css">
-  
+  <jsp:include page="/template/header.jsp"></jsp:include>
+    
 
 <script>
 	$(function(){
@@ -162,5 +159,5 @@
 	</div>
 	
 </form>
-<%-- <jsp:include page="/template/footer.jsp"></jsp:include>
- --%>
+  <jsp:include page="/template/footer.jsp"></jsp:include>
+  

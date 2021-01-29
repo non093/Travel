@@ -12,38 +12,8 @@
 <title>오늘의 길</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/member.css">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-
-<style>
-	main, header, nav, section, 
-	aside, article, footer, div,
-	label, span, p {
-		border: 1px dotted #ccc;
-	}
-	article::after {
-            content:"";
-            display: block;
-            clear:both;
-    }
-	aside {
-            float:left;
-            width:15%;
-            min-height:500px;
-    }
-    section {
-            float:left;
-            width:85%;
-            min-height:500px;
-    }
-	div {
-		min-height: 250px;
-	} 
-	header, footer, nav, section {
-		padding:1rem;
-	}
-	
-</style>
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script>
+ 
+ <script>
 
 </script> 
 </head>

@@ -3,9 +3,9 @@
 <%@page import="beans.MemberDao"%>
 <%@page import="beans.MemberDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/member.css">  
+    pageEncoding="UTF-8"%>  
+    <jsp:include page="/template/header.jsp"></jsp:include>
+
      
     <%
     	int member_no = (int)session.getAttribute("check");
@@ -22,12 +22,12 @@ $(function(){
 	var popupHeight;
 	
 
-	$(".nick-btn").click(function(){//닉네임 중복체크
+	$(".nick_btn").click(function(){//닉네임 중복체크
 		popupHeight = 200;
 		var x =  (document.body.offsetWidth / 2) - (popupWidth / 2);
 		var y =  (window.screen.height /2) - (popupHeight / 2);
 		
-		var nick = document.querySelector(".nick").value;
+		var nick = $(".nick").val();
 		
 		url = "nick_check.jsp?member_nick="+nick;
 		open(url, "닉네임 중복체크","toolbar=no, menubar=no, scrollbar=no,resizable=no, width="+popupWidth+",height="+popupHeight+", left="+x+", top="+y);
@@ -118,9 +118,9 @@ $(function(){
 		</div>
 		
 		<div class="mem_row">
-			<div class="nick">
+			<div  >
 			<label>NICK</label>
-			<button class="btn btn_hover">중복 확인</button></div>
+			<button class="btn btn_hover nick_btn">중복 확인</button></div>
 			<input type="text" name="member_nick" value="<%=memberDto.getMember_nick() %>" class="mem_input nick">
 			<input type="hidden" class="nick_checked" name="nick_checked" value="2">
 			<!-- value가 0 = 중복체크해야됨| 1 = 중복체크 통과 | 2 = 원래 닉네임-->
@@ -143,5 +143,5 @@ $(function(){
 		</div>
 	</div>
 </form>
-<%-- <jsp:include page="/template/footer.jsp"></jsp:include>
- --%>
+  <jsp:include page="/template/footer.jsp"></jsp:include>
+ 
