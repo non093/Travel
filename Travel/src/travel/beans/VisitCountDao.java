@@ -1,16 +1,16 @@
-package beans;
+package travel.beans;
 
 import java.sql.Connection;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import util.JdbcUtil;
+import travel.util.JdbcUtil;
 
-public class VisitCountDAO {
+public class VisitCountDao {
+	public static final String USERNAME = "semi_project";
+	public static final String PASSWORD = "semi_project"; 
 	
-	public static final String USERNAME = "semi";
-	public static final String PASSWORD = "semi";
 	public String session;
 	
 	public boolean visitCheck(String session) throws Exception {

@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import travel.admin.util.JdbcUtil;
+import travel.util.JdbcUtil;
 
 public class ReportDao {
 	

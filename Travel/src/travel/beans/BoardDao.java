@@ -10,8 +10,8 @@ import java.util.Objects;
 import travel.util.JdbcUtil;
 
 public class BoardDao {
-	public static final String USERNAME = "semi";
-	public static final String PASSWORD = "semi";
+	public static final String USERNAME = "semi_project";
+	public static final String PASSWORD = "semi_project";
 	private String cate;
 
 

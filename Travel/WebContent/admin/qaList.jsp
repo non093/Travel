@@ -106,7 +106,7 @@
 
 
 <jsp:include page="/template/header.jsp"></jsp:include>
-<jsp:include page="/template/side.jsp"></jsp:include>
+
 <script>
 	$(function(){
 		//.write-btn을 누르면 글쓰기 페이지로 이동

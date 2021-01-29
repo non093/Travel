@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import travel.admin.util.JdbcUtil;
+import travel.util.JdbcUtil;
 
 public class MemberDao {
 	public static final String USERNAME = "semi_project";
