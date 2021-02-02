@@ -1,8 +1,10 @@
 # Travel
 
-- SE2.zip을 압축해제하여 SE2 폴더를 webcontent에 적용
+> 네이버 스마트 에디터 적용방법
 
-  WEB-INF에 다음 jar 적용 -> lib 폴더 안에 적용 -> commons-fileupoad-1.2.2.jar, commons-io-1.4.jar, cos.jar
+>>  SE2.zip을 압축해제하여 SE2 폴더를 webcontent에 적용
+
+>>  WEB-INF에 다음 jar 적용 -> lib 폴더 안에 적용 -> commons-fileupoad-1.2.2.jar, commons-io-1.4.jar, cos.jar
   
  --------------------------------------------------------------------------------------------------------
  # 사용한 API
