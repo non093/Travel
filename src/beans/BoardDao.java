@@ -22,7 +22,14 @@ public class BoardDao {
 	public void setCate(String cate) {
 		this.cate = cate;
 	}
-
+	//검색필터 확인 메소드
+	public boolean isSearchFilter(String type) {
+		if(type == null || (!type.equals("글쓴이") && !type.equals("제목"))) {
+			return false;
+		}
+		return true;
+	}
+	
 	// 말머리 확인 메소드
 	public boolean checkIsNotHead(String board_head) {
 		if (cate.equals("자유")) {
